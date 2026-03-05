@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>VOID - The Future of Spatial Computing</title>
+    
+    <!-- Meta Tags -->
+    <meta name="description" content="Experience the future of human-computer interaction with VOID's AI-powered spatial interface.">
+    <meta name="keywords" content="spatial computing, AI, mixed reality, hand tracking, 3D interface">
+    <meta name="author" content="VOID Labs">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="VOID - Spatial Interface">
+    <meta property="og:description" content="The future of human-computer interaction">
+    <meta property="og:image" content="assets/images/void-preview.jpg">
+    <meta property="og:url" content="https://void.space">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/animations.css">
+    
+    <!-- Three.js and Dependencies -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/effects/OutlineEffect.js"></script>
+    
+    <!-- TensorFlow and Hand Tracking -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.11.0/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/hand-pose@0.0.7/dist/hand-pose.min.js"></script>
+    
+    <!-- GSAP for Animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    
+    <!-- Particle System -->
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+</head>
+<body>
+    <!-- Custom Cursor -->
+    <div class="cursor"></div>
+    <div class="cursor-follower"></div>
+    
+    <!-- Navigation -->
+    <nav class="navbar glass-effect">
+        <div class="nav-container">
+            <div class="logo">
+                <span class="logo-text">VOID</span>
+                <div class="logo-glow"></div>
+            </div>
+            
+            <div class="nav-menu">
+                <a href="#home" class="nav-link active">Home</a>
+                <a href="#about" class="nav-link">About</a>
+                <a href="#features" class="nav-link">Features</a>
+                <a href="#demo" class="nav-link">Demo</a>
+                <a href="#contact" class="nav-link">Contact</a>
+            </div>
+            
+            <div class="nav-actions">
+                <button class="btn btn-outline" id="loginBtn">Sign In</button>
+                <button class="btn btn-primary" id="launchBtn">Launch Void</button>
+                <div class="menu-toggle" id="menuToggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Main Content Sections -->
+    <main>
+        <!-- Hero Section -->
+        <section id="home" class="hero-section">
+            <div id="hero-canvas" class="canvas-container"></div>
+            
+            <div class="hero-content">
+                <h1 class="hero-title animate-text">
+                    <span class="gradient-text">VOID</span>
+                    <span class="block text-4xl md:text-6xl">Spatial Computing</span>
+                </h1>
+                
+                <p class="hero-subtitle">
+                    Experience the future of human-computer interaction with AI-powered spatial interfaces.
+                    No headset required. Just your hands and imagination.
+                </p>
+                
+                <div class="hero-cta">
+                    <button class="btn btn-primary btn-large" onclick="startExperience()">
+                        <span>Enter the Void</span>
+                        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M5 12h14M12 5l7 7-7 7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                    
+                    <button class="btn btn-outline btn-large" onclick="watchDemo()">
+                        <span>Watch Demo</span>
+                        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" stroke-width="2"/>
+                            <path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-width="2"/>
+                        </svg>
+                    </button>
+                </div>
+                
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <span class="stat-number" data-target="500">0</span>
+                        <span class="stat-label">Alpha Users</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" data-target="99.9">0.0</span>
+                        <span class="stat-label">Accuracy</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" data-target="24">0</span>
+                        <span class="stat-label">ms Latency</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="scroll-indicator">
+                <div class="mouse"></div>
+                <span>Scroll to explore</span>
+            </div>
+        </section>
+        
+        <!-- About Section -->
+        <section id="about" class="about-section">
+            <div class="section-header">
+                <h2 class="section-title">Beyond the Screen</h2>
+                <p class="section-subtitle">VOID represents a paradigm shift in how we interact with digital information</p>
+            </div>
+            
+            <div class="about-grid">
+                <div class="about-card glass-effect" data-tilt>
+                    <div class="card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M12 18v-6M12 6h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-width="1.5"/>
+                        </svg>
+                    </div>
+                    <h3>Spatial Intelligence</h3>
+                    <p>AI understands your environment and adapts interfaces in real-time</p>
+                </div>
+                
+                <div class="about-card glass-effect" data-tilt>
+                    <div class="card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M7 11.5V14m0-2.5v-6a1.5 1.5 0 113 0m-3 6a1.5 1.5 0 10-3 0v2a7.5 7.5 0 0015 0v-5a1.5 1.5 0 00-3 0m-6-3V11m0-5.5v-1a1.5 1.5 0 013 0v1m0 0V11m0-5.5a1.5 1.5 0 013 0v3m0 0V11" stroke-width="1.5"/>
+                        </svg>
+                    </div>
+                    <h3>Natural Interaction</h3>
+                    <p>Use your hands naturally - point, grab, and manipulate digital objects</p>
+                </div>
+                
+                <div class="about-card glass-effect" data-tilt>
+                    <div class="card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <path d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" stroke-width="1.5"/>
+                        </svg>
+                    </div>
+                    <h3>Any Device</h3>
+                    <p>Works on any device with a camera - laptop, tablet, or phone</p>
+                </div>
+            </div>
+            
+            <div class="tech-showcase">
+                <div class="tech-item">
+                    <span class="tech-dot"></span>
+                    <span>WebXR</span>
+                </div>
+                <div class="tech-item">
+                    <span class="tech-dot"></span>
+                    <span>TensorFlow.js</span>
+                </div>
+                <div class="tech-item">
+                    <span class="tech-dot"></span>
+                    <span>Three.js</span>
+                </div>
+                <div class="tech-item">
+                    <span class="tech-dot"></span>
+                    <span>Gemini AI</span>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Features Section -->
+        <section id="features" class="features-section">
+            <div class="section-header">
+                <h2 class="section-title">Capabilities</h2>
+                <p class="section-subtitle">Powered by cutting-edge AI and computer vision</p>
+            </div>
+            
+            <div class="features-slider">
+                <div class="feature-slide active" data-feature="hand">
+                    <div class="feature-visual">
+                        <canvas id="hand-canvas"></canvas>
+                    </div>
+                    <div class="feature-content">
+                        <h3>Precision Hand Tracking</h3>
+                        <p>21 key points tracked at 60fps with sub-millimeter accuracy</p>
+                        <ul class="feature-list">
+                            <li>✓ Finger pinch detection</li>
+                            <li>✓ Gesture recognition</li>
+                            <li>✓ Palm orientation</li>
+                            <li>✓ Multi-hand support</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="feature-slide" data-feature="ai">
+                    <div class="feature-visual">
+                        <canvas id="ai-canvas"></canvas>
+                    </div>
+                    <div class="feature-content">
+                        <h3>AI Spatial Generation</h3>
+                        <p>Real-time 3D object generation from natural language</p>
+                        <ul class="feature-list">
+                            <li>✓ Text-to-3D conversion</li>
+                            <li>✓ Context awareness</li>
+                            <li>✓ Dynamic layouts</li>
+                            <li>✓ Semantic understanding</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="feature-slide" data-feature="collab">
+                    <div class="feature-visual">
+                        <canvas id="collab-canvas"></canvas>
+                    </div>
+                    <div class="feature-content">
+                        <h3>Multi-User Collaboration</h3>
+                        <p>Share your spatial workspace with others in real-time</p>
+                        <ul class="feature-list">
+                            <li>✓ Shared environments</li>
+                            <li>✓ Avatar presence</li>
+                            <li>✓ Voice chat</li>
+                            <li>✓ Object sharing</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="feature-controls">
+                <button class="feature-prev">←</button>
+                <div class="feature-dots">
+                    <span class="dot active"></span>
+                    <span class="dot"></span>
+                    <span class="dot"></span>
+                </div>
+                <button class="feature-next">→</button>
+            </div>
+        </section>
+        
+        <!-- Live Demo Section -->
+        <section id="demo" class="demo-section">
+            <div class="demo-container">
+                <div class="demo-header">
+                    <h2>Try It Now</h2>
+                    <p>Grant camera access to experience spatial computing</p>
+                </div>
+                
+                <div class="demo-main">
+                    <!-- 3D Canvas for Demo -->
+                    <div id="demo-canvas" class="demo-canvas"></div>
+                    
+                    <!-- UI Overlay -->
+                    <div class="demo-ui">
+                        <div class="hand-status" id="handStatus">
+                            <div class="status-indicator"></div>
+                            <span>Waiting for hands...</span>
+                        </div>
+                        
+                        <div class="demo-orbs" id="demoOrbs">
+                            <!-- Orbs will be populated by JS -->
+                        </div>
+                        
+                        <div class="demo-controls">
+                            <button class="demo-btn" onclick="resetScene()">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" stroke-width="2"/>
+                                </svg>
+                            </button>
+                            
+                            <button class="demo-btn" onclick="toggleFullscreen()">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <path d="M4 8V4m0 0h4M4 4l5 5m11-5h-4m4 0v4m0 0l-5-5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" stroke-width="2"/>
+                                </svg>
+                            </button>
+                            
+                            <button class="demo-btn" onclick="captureSnapshot()">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <path d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" stroke-width="2"/>
+                                    <path d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" stroke-width="2"/>
+                                </svg>
+                            </button>
+                        </div>
+                        
+                        <!-- AI Input Panel -->
+                        <div class="ai-panel" id="aiPanel">
+                            <div class="ai-input-container">
+                                <input 
+                                    type="text" 
+                                    id="aiPrompt" 
+                                    placeholder="Ask AI to generate something..."
+                                    class="ai-input"
+                                />
+                                <button class="ai-send" onclick="sendAIPrompt()">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                        <path d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" stroke-width="2"/>
+                                    </svg>
+                                </button>
+                            </div>
+                            
+                            <div class="ai-suggestions">
+                                <button onclick="setPrompt('Create a galaxy of ideas')">✨ Galaxy of ideas</button>
+                                <button onclick="setPrompt('Generate a data visualization')">📊 Data viz</button>
+                                <button onclick="setPrompt('Make a mind map')">🧠 Mind map</button>
+                            </div>
+                            
+                            <div class="ai-response" id="aiResponse"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Contact Section -->
+        <section id="contact" class="contact-section">
+            <div class="contact-container">
+                <h2>Join the Future</h2>
+                <p>Be among the first to experience spatial computing</p>
+                
+                <form id="contactForm" class="contact-form">
+                    <div class="form-group">
+                        <input type="text" id="name" placeholder="Your name" required>
+                        <label for="name">Name</label>
+                    </div>
+                    
+                    <div class="form-group">
+                        <input type="email" id="email" placeholder="Your email" required>
+                        <label for="email">Email</label>
+                    </div>
+                    
+                    <div class="form-group">
+                        <select id="interest" required>
+                            <option value="">Select interest</option>
+                            <option value="developer">Developer</option>
+                            <option value="designer">Designer</option>
+                            <option value="investor">Investor</option>
+                            <option value="user">Early User</option>
+                        </select>
+                        <label for="interest">I am a...</label>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary btn-full">
+                        <span>Get Early Access</span>
+                        <div class="btn-glow"></div>
+                    </button>
+                </form>
+                
+                <div class="social-links">
+                    <a href="#" class="social-link">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"/>
+                        </svg>
+                    </a>
+                    <a href="#" class="social-link">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84"/>
+                        </svg>
+                    </a>
+                    <a href="#" class="social-link">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0z"/>
+                            <path d="M12 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8z"/>
+                            <circle cx="18.406" cy="5.594" r="1.44"/>
+                        </svg>
+                    </a>
+                    <a href="#" class="social-link">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <div class="logo">VOID</div>
+                <p>The future of spatial computing</p>
+            </div>
+            
+            <div class="footer-links">
+                <div class="footer-column">
+                    <h4>Product</h4>
+                    <a href="#">Features</a>
+                    <a href="#">Pricing</a>
+                    <a href="#">Demo</a>
+                    <a href="#">Roadmap</a>
+                </div>
+                
+                <div class="footer-column">
+                    <h4>Company</h4>
+                    <a href="#">About</a>
+                    <a href="#">Blog</a>
+                    <a href="#">Careers</a>
+                    <a href="#">Press</a>
+                </div>
+                
+                <div class="footer-column">
+                    <h4>Resources</h4>
+                    <a href="#">Documentation</a>
+                    <a href="#">API</a>
+                    <a href="#">Community</a>
+                    <a href="#">Support</a>
+                </div>
+                
+                <div class="footer-column">
+                    <h4>Legal</h4>
+                    <a href="#">Privacy</a>
+                    <a href="#">Terms</a>
+                    <a href="#">Security</a>
+                    <a href="#">Cookies</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; 2026 VOID Labs. All rights reserved.</p>
+            <div class="footer-badges">
+                <span>Made with ⚡ for spatial web</span>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Modals -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content glass-effect">
+            <div class="modal-header">
+                <h2>Welcome Back</h2>
+                <button class="modal-close" onclick="closeModal('loginModal')">×</button>
+            </div>
+            
+            <form id="loginForm" class="modal-form">
+                <div class="form-group">
+                    <input type="email" id="loginEmail" placeholder="Email" required>
+                    <label for="loginEmail">Email</label>
+                </div>
+                
+                <div class="form-group">
+                    <input type="password" id="loginPassword" placeholder="Password" required>
+                    <label for="loginPassword">Password</label>
+                </div>
+                
+                <div class="form-options">
+                    <label class="checkbox">
+                        <input type="checkbox"> Remember me
+                    </label>
+                    <a href="#" class="forgot-password">Forgot password?</a>
+                </div>
+                
+                <button type="submit" class="btn btn-primary btn-full">Sign In</button>
+            </form>
+            
+            <div class="modal-footer">
+                <p>Don't have an account? <a href="#" onclick="showSignup()">Sign up</a></p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Scripts -->
+    <script src="js/main.js"></script>
+    <script src="js/three-setup.js"></script>
+    <script src="js/hand-tracking.js"></script>
+    <script src="js/ai-integration.js"></script>
+    <script src="js/ui-controller.js"></script>
+</body>
+</html>
